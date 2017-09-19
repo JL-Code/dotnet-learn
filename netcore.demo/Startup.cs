@@ -10,6 +10,9 @@ using Microsoft.Extensions.Logging;
 using System.Text;
 using NLog.Extensions.Logging;
 using NLog.Web;
+using Microsoft.Extensions.PlatformAbstractions;
+using System.IO;
+using Swashbuckle.AspNetCore.Swagger;
 
 namespace netcore.demo
 {
@@ -32,6 +35,12 @@ namespace netcore.demo
         {
             // Add framework services.
             services.AddMvc();
+            // Register the Swagger generator, defining one or more Swagger documents
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new Info { Title = "My API", Version = "v1" });
+            });
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -40,7 +49,17 @@ namespace netcore.demo
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
             loggerFactory.AddNLog();//添加NLog
             env.ConfigureNLog("nlog.config");//读取Nlog配置文件
+
+            // Enable middleware to serve generated Swagger as a JSON endpoint.
+            app.UseSwagger();
+
+            // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.), specifying the Swagger JSON endpoint.
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+            });
             app.UseMvc();
+           
         }
     }
 }
