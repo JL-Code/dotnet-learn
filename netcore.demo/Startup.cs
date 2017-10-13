@@ -13,11 +13,13 @@ using NLog.Web;
 using Microsoft.Extensions.PlatformAbstractions;
 using System.IO;
 using Swashbuckle.AspNetCore.Swagger;
+using System.Security.Claims;
 
 namespace netcore.demo
 {
     public class Startup
     {
+        
         public Startup(IHostingEnvironment env)
         {
             var builder = new ConfigurationBuilder()
@@ -59,7 +61,6 @@ namespace netcore.demo
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
             });
             app.UseMvc();
-           
         }
     }
 }
