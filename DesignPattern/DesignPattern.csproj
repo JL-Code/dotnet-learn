@@ -6,6 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Folder Include="简单工厂\" />
     <Folder Include="观察者模式\" />
   </ItemGroup>
 </Project>
