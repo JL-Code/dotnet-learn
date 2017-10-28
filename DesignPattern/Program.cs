@@ -2,6 +2,7 @@
 using DesignPattern.工厂方法;
 using DesignPattern.装饰者模式;
 using System;
+using System.Collections.Generic;
 using System.Threading;
 
 namespace DesignPattern
@@ -40,13 +41,18 @@ namespace DesignPattern
             //Pizza pizza2 = store.OrderPizza("ZJG");
             #endregion
 
-            var test = new SigintonTest();
-            test.Test();
-
-
+            var package = new RedPackage();
+            //伴娘伴郎红包 188*6 铺床红包188*2 司机红包166*6 小舅子红包188*1 
+            //亲戚小孩红包68*10 摄像红包128*1 化妆红包68*1 开门红包10*40 小红包2*100
+            package.RunAndOutput(new Dictionary<int, int> {
+                { 188, 7 },
+                { 166, 6 },
+                { 128, 1 },
+                { 68, 11 },
+                { 10, 40 },
                 { 2, 100 }
             });
-            Console.WriteLine(temp);
+
         }
 
 

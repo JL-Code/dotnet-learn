@@ -12,12 +12,12 @@ namespace DesignPattern
 
         public RedPackage()
         {
-            metadata.Add("One", 1);
-            metadata.Add("Five", 5);
-            metadata.Add("Ten", 10);
-            metadata.Add("Twenty", 20);
-            metadata.Add("Fifty", 50);
-            metadata.Add("OneHundred", 100);
+            metadata.Add("1", 1);
+            metadata.Add("5", 5);
+            metadata.Add("10", 10);
+            metadata.Add("20", 20);
+            metadata.Add("50", 50);
+            metadata.Add("100", 100);
         }
 
         private Dictionary<string, int> Compute(int target)
@@ -71,51 +71,61 @@ namespace DesignPattern
         public Dictionary<string, int> Run(int target, int count)
         {
             var combination = Compute(target);
+            var dict = new Dictionary<string, int>();
             foreach (var key in combination.Keys)
             {
-                combination[key] = combination[key] * count;
+                if (dict.ContainsKey(key))
+                {
+                    dict[key] = combination[key] * count;
+                }
+                else
+                {
+                    dict.Add(key, combination[key] * count);
+                }
             }
-            return combination;
+            return dict;
         }
 
         public Dictionary<string, int> Run(Dictionary<int, int> redPackage)
         {
             var sum = new Dictionary<string, int>();
-            var list = new List<Dictionary<string, int>>();
             foreach (var key in redPackage.Keys)
             {
                 var temp = Run(key, redPackage[key]);
-                list.Add(temp);
+                foreach (var mkey in metadata.Keys)
+                {
+                    if (sum.ContainsKey(mkey))
+                    {
+                        if (temp.ContainsKey(mkey))
+                            sum[mkey] += temp[mkey];
+                    }
+                    else
+                    {
+                        if (temp.ContainsKey(mkey))
+                            sum.Add(mkey, temp[mkey]);
+                    }
+                }
             }
-            //list.ForEach(temp=>{
-            //    foreach (var tempKey in temp.Keys)
-            //    {
-            //        if (sum.ContainsKey(tempKey))
-            //        {
-            //            sum[tempKey] += temp[tempKey];
-            //        }
-            //        else
-            //        {
-            //            sum.Add(tempKey, temp[tempKey]);
-            //        }
-            //    }
-            //});
             return sum;
         }
 
         public void RunAndOutput(Dictionary<int, int> redPackage)
         {
-            string output = "";
+            var total = 0;
+            string output = "红包清单\n\r";
             foreach (var item in redPackage)
             {
-                output += $"红包面值：{item.Key}， 红包个数：{item.Value} ";
+                output += $"红包面值：{item.Key}， 红包个数：{item.Value}\n\r";
             }
             var data = Run(redPackage);
-            output += "\n\r";
-            foreach (var item in data)
+            output += "\n\r\n\r";
+            output += "零钱清单：";
+            foreach (var key in data.Keys)
             {
-                output += $"纸币面值：{item.Key}，数量：{item.Value}\n\r";
+                output += $"纸币面值：{key}，所需纸币数量：{data[key]}\n\r";
+                total += Convert.ToInt32(key) * data[key];
             }
+            output += $"总金额：{total}";
             Console.WriteLine(output);
         }
     }
